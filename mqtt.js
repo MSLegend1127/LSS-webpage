@@ -1,63 +1,86 @@
-        // MQTT Configuration
-        const broker1 = "5.196.78.28"; // Replace with your broker's IP
-        const port1 = 1883; // Replace with the broker's WebSocket port
+// MQTT Configuration
+let IP = "5.196.78.28"; // Broker IP address
+let port = 1883; // MQTT broker port
+console.log(`${sectorId}`)
 
-        function createClient(clientId) {
-            return new Paho.MQTT.Client(broker1, port1, clientId);
+// Create a new MQTT client
+function createClient(clientId) {
+    return new Paho.MQTT.Client(IP, port, clientId);
+}
+
+// Publish MQTT message with sector data and motor state
+function publishMQTT(sectorId, payload) {
+    const topic = `sector${sectorId}`;
+    const message = new Paho.MQTT.Message(JSON.stringify(payload));
+    message.destinationName = topic;
+
+    const client = createClient(`client_${sectorId}_${Date.now()}`);
+    
+    client.connect({
+        onSuccess: function () {
+            console.log(`Connected to broker. Sending data to ${topic}`);
+            client.send(message);
+            client.disconnect();
+        },
+        onFailure: function (error) {
+            console.error("Connection failed:", error.errorMessage);
         }
+    });
+}
 
-        function publishMQTT(sectorId, topicSuffix, payload) {
-            const topic = `sector${sectorId}`;
-            const message = new Paho.MQTT.Message(payload);
-            message.destinationName = topic;
-
-            const client = createClient(`client_${sectorId}_${Date.now()}`);
-            client.connect({
-                onSuccess: function () {
-                    console.log(`Connected to broker. Sending: ${payload} to ${topic}`);
-                    client.send(message);
-                    client.disconnect();
-                },
-                onFailure: function (error) {
-                    console.error("Connection failed:", error.errorMessage);
-                }
-            });
+// Update progress bars and percentage labels for moisture data
+function updateProgressBar(sectorId, moistureData) {
+    // Update sensor progress bars and labels
+    for (let i = 1; i <= 4; i++) {
+        const sensorBar = document.querySelector(`#sector${sectorId} .progress-bar:nth-child(${i}) .progress`);
+        const sensorLabel = document.querySelector(`#sensor${i}-label`);
+        
+        if (sensorBar && sensorLabel) {
+            const moistureValue = moistureData[i-1];
+            sensorBar.style.width = `${moistureValue}%`;
+            sensorLabel.textContent = `Sensor ${i}: ${moistureValue.toFixed(1)}%`;
         }
+    }
 
-        // Function to update progress bars and percentage labels
-        function updateProgressBar(sectorId, sensorValues) {
-            for (let i = 1; i <= 4; i++) {
-                const sensorBar = document.querySelector(`#sector${sectorId} .progress-bar:nth-child(${i}) .progress`);
-                const sensorLabel = document.querySelector(`#sensor${i}-label`);
-                sensorBar.style.width = `${sensorValues[i-1]}%`;
-                sensorLabel.textContent = `Sensor ${i}: ${sensorValues[i-1].toFixed(1)}%`;
-            }
+    // Calculate average moisture level and update the progress bar
+    const avg = moistureData.reduce((a, b) => a + b, 0) / moistureData.length;
+    const avgBar = document.querySelector(`#sector${sectorId} .avg-bar .progress`);
+    const avgLabel = document.querySelector(`#avg-label${sectorId}`);
 
-            // Calculate average for the sector
-            const avg = sensorValues.reduce((a, b) => a + b, 0) / sensorValues.length;
-            const avgBar = document.querySelector(`#sector${sectorId} .avg-bar .progress`);
-            const avgLabel = document.querySelector(`#avg-label${sectorId}`);
-            avgBar.style.width = `${avg}%`;
-            avgLabel.textContent = `Avg: ${avg.toFixed(1)}%`;
-        }
+    if (avgBar && avgLabel) {
+        avgBar.style.width = `${avg}%`;
+        avgLabel.textContent = `Avg: ${avg.toFixed(1)}%`;
+    }
+}
 
-        // Simulate data for each sector (you can replace this with real sensor data)
-        setInterval(() => {
-            const sector1Data = [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100];
-            updateProgressBar(1, sector1Data);
-        }, 3000); // Update every 3 seconds (simulate real-time data)
+// Simulate real-time sensor data (remove if using actual sensor data)
+setInterval(() => {
+    const sector1Data = [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100];
+    updateProgressBar(1, sector1Data);
+}, 3000);
 
-        // Toggle motor state
-        function toggleState(sectorId) {
-            const toggle = document.getElementById(`toggle${sectorId}`);
-            const isOn = toggle.classList.toggle('on'); // Toggle the 'on' class
-            const state = isOn ? "ON" : "OFF";
-            const topicSuffix = `motor_state`; // Topic suffix for motor state
+// Toggle motor state and update UI
+function toggleState(sectorId) {
+    const toggle = document.getElementById(`toggle${sectorId}`);
+    const isOn = toggle.classList.toggle('on');
+    const state = isOn ? 1 : 0;
 
-            // Publish MQTT message with the sector ID and state
-            publishMQTT(sectorId, topicSuffix, state);
+    // Simulate sensor data (replace with actual sensor readings)
+    const moistureData = [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100];
 
-            // Optional: Update UI to indicate current state
-            const label = toggle.previousElementSibling; // Get the label element
-            label.textContent = `Motor for Sector ${sectorId}: ${state}`;
-        }
+    // Create payload to send via MQTT
+    const payload = {
+        moisture: moistureData,
+        motor: state
+    };
+
+    // Publish data to MQTT broker
+    publishMQTT(sectorId, payload);
+
+    // Update label text based on motor state
+    const label = toggle.previousElementSibling;
+    label.textContent = `Motor for Sector ${sectorId}: ${state === 1 ? "ON" : "OFF"}`;
+
+    // Update progress bars with new moisture data
+    updateProgressBar(sectorId, moistureData);
+}
