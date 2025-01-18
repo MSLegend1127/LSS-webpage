@@ -1,7 +1,7 @@
 // MQTT Configuration
 let IP = "5.196.78.28"; // Broker IP address
 let port = 1883; // MQTT broker port
-console.log(`${sectorId}`)
+
 
 // Create a new MQTT client
 function createClient(clientId) {
@@ -79,7 +79,7 @@ function toggleState(sectorId) {
 
     // Update label text based on motor state
     const label = toggle.previousElementSibling;
-    label.textContent = `Motor for Sector ${sectorId}: ${state === 1 ? "ON" : "OFF"}`;
+    label.textContent = `sprinkler ${sectorId}: ${state === 1 ? "ON" : "OFF"}`;
 
     // Update progress bars with new moisture data
     updateProgressBar(sectorId, moistureData);
