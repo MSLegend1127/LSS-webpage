@@ -1,23 +1,24 @@
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Times New Roman', Times, Garamond;
+    font-size: 40px;
     margin: 0;
     padding: 0;
-    background-color: #282c34;
-    color: white;
+    background-color: #1D2021;
+    color: #FBF1C7;
 }
 
 header {
     text-align: center;
     padding: 20px;
-    background-color: #20232a;
+    background-color: hsl(0,0%,16%);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
     margin: 0;
     font-size: 2.5rem;
-    color: #61dafb;
+    color: #458588;
 }
 
 main {
@@ -25,7 +26,8 @@ main {
 }
 
 .sector {
-    background: #333;
+    font-size: 29px;
+    background: #282828;
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
@@ -35,9 +37,9 @@ main {
 }
 
 .sector h2 {
-    font-size: 1.8rem;
+    font-size: 49px;
     margin-bottom: 10px;
-    color: #61dafb;
+    color: rgb(104,157,106);
 }
 
 .progress-container {
@@ -51,6 +53,7 @@ main {
 }
 
 .progress-label {
+    font-size: 25px;
     flex: 1;
     text-align: left;
 }
@@ -66,7 +69,7 @@ main {
 
 .progress-fill {
     height: 100%;
-    background: #4caf50;
+    background: #8EC07C;
     width: 0;
     transition: width 0.3s;
 }
@@ -127,22 +130,22 @@ main {
 .button-container button {
     width: 220px;
     height: 60px;
-    background-color: #ffffff; /* White button */
+    background-color: #FBF1C7; 
     border: none;
     border-radius: 10px;
-    color: #000000; /* Black text */
+    color: hsl(195,6.5%,12.2%); 
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button-container button:hover {
-    background-color: #f2f2f2; /* Light gray on hover */
+/*    background-color: #f2f2f2;  Light gray on hover */
     transform: scale(1.05);
 }
 
 .line {
     height: 1px; /* Adjust this value to change the thickness */
-    background-color: #689D68; /* Set the color of the hr */
+    background-color: rgb(251,73,52); /* Set the color of the hr */
     border: none; /* Remove the default border */
 }
