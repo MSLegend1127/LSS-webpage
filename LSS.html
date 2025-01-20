@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/mqtt/dist/mqtt.min.js"></script>
+
+
     <title>LSS</title>
     <link rel="icon" href="download_mustang_black_logo_transparent_png_4561.png">
-    <hr class="line">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
-
+    <script src="script.js"></script>
     <link rel="stylesheet" href="styles.css">
     
 </head>
@@ -41,31 +42,31 @@
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 1</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor1"></div>
+                        <div class="progress-fill" id="sector-sensor1"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 2</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor2"></div>
+                        <div class="progress-fill" id="sector1-sensor2"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 3</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor3"></div>
+                        <div class="progress-fill" id="sector1-sensor3"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 4</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor4"></div>
+                        <div class="progress-fill" id="sector1-sensor4"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
-                    <span class="progress-label">Average</span>
+                    <span class="progress-label" id="sector1-avg-label">Average</span>
                     <div class="progress">
-                        <div class="progress-fill" id="average"></div>
+                        <div class="progress-fill" id="sector1-avg"></div>
                     </div>
                 </div>
             </div>
@@ -97,31 +98,31 @@
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 1</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor1"></div>
+                            <div class="progress-fill" id="sector2-sensor1"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 2</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor2"></div>
+                            <div class="progress-fill" id="sector2-sensor2"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 3</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor3"></div>
+                            <div class="progress-fill" id="sector2-sensor3"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 4</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor4"></div>
+                            <div class="progress-fill" id="sector2-sensor4"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
-                        <span class="progress-label">Average</span>
+                        <span class="progress-label" id="sector2-avg-label">Average</span>
                         <div class="progress">
-                            <div class="progress-fill" id="average"></div>
+                            <div class="progress-fill" id="sector2-avg"></div>
                         </div>
                     </div>
                 </div>
@@ -135,7 +136,7 @@
                     <button onclick="location.href='#head'" class="button2">Return to home page</button></div></center>
               </div>
             </div>
-            <script src="script.js"></script>
+            
         </main>
 
   
@@ -153,31 +154,31 @@
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 1</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor1"></div>
+                            <div class="progress-fill" id="sector3-sensor1"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 2</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor2"></div>
+                            <div class="progress-fill" id="sector3-sensor2"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 3</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor3"></div>
+                            <div class="progress-fill" id="sector3-sensor3"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 4</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor4"></div>
+                            <div class="progress-fill" id="sector3-sensor4"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
-                        <span class="progress-label">Average</span>
+                        <span class="progress-label" id="sector3-avg-label">Average</span>
                         <div class="progress">
-                            <div class="progress-fill" id="average"></div>
+                            <div class="progress-fill" id="sector3-avg"></div>
                         </div>
                     </div>
                 </div>
@@ -191,8 +192,7 @@
                     <button onclick="location.href='#head'" class="button2">Return to home page</button></div></center>
               </div>
             </div>
-            <script src="script.js"></script>
-        </main>
+                    </main>
 
 
   
@@ -210,31 +210,31 @@
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 1</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor1"></div>
+                            <div class="progress-fill" id="sector4-sensor1"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 2</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor2"></div>
+                            <div class="progress-fill" id="sector4-sensor2"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 3</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor3"></div>
+                            <div class="progress-fill" id="sector4-sensor3"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 4</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor4"></div>
+                            <div class="progress-fill" id="sector4-sensor4"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
-                        <span class="progress-label">Average</span>
+                        <span class="progress-label" id="sector4-avg-label">Average</span>
                         <div class="progress">
-                            <div class="progress-fill" id="average"></div>
+                            <div class="progress-fill" id="sector4-avg"></div>
                         </div>
                     </div>
                 </div>
@@ -250,8 +250,7 @@
             </div>
         </main>
 
-    <script src="script.js"></script>
-  
+      
     </div>
 
     <!-- Sector 5-->
@@ -266,31 +265,31 @@
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 1</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor1"></div>
+                            <div class="progress-fill" id="sector5-sensor1"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 2</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor2"></div>
+                            <div class="progress-fill" id="sector5-sensor2"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 3</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor3"></div>
+                            <div class="progress-fill" id="sector5-sensor3"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 4</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor4"></div>
+                            <div class="progress-fill" id="sector5-sensor4"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
-                        <span class="progress-label">Average</span>
+                        <span class="progress-label" id="sector5-avg-label">Average</span>
                         <div class="progress">
-                            <div class="progress-fill" id="average"></div>
+                            <div class="progress-fill" id="sector5-avg"></div>
                         </div>
                     </div>
                 </div>
@@ -304,8 +303,7 @@
                     <button onclick="location.href='#head'" class="button2">Return to home page</button></div></center>
               </div>
             </div>
-            <script src="script.js"></script>
-        </main>
+                    </main>
 
 
   
@@ -323,31 +321,31 @@
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 1</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor1"></div>
+                            <div class="progress-fill" id="sector6-sensor1"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 2</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor2"></div>
+                            <div class="progress-fill" id="sector6-sensor2"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 3</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor3"></div>
+                            <div class="progress-fill" id="sector6-sensor3"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <span class="progress-label">Sensor 4</span>
                         <div class="progress">
-                            <div class="progress-fill" id="sensor4"></div>
+                            <div class="progress-fill" id="sector6-sensor4"></div>
                         </div>
                     </div>
                     <div class="progress-bar">
-                        <span class="progress-label">Average</span>
+                        <span class="progress-label" id="sector6-avg-label">Average</span>
                         <div class="progress">
-                            <div class="progress-fill" id="average"></div>
+                            <div class="progress-fill" id="sector6-avg"></div>
                         </div>
                     </div>
                 </div>
@@ -361,8 +359,7 @@
                     <button onclick="location.href='#head'" class="button2">Return to home page</button></div></center>
               </div>
             </div>
-            <script src="script.js"></script>
-        </main>
+                    </main>
 
 
   
@@ -381,33 +378,33 @@
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 1</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor1"></div>
+                        <div class="progress-fill" id="sector7-sensor1"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 2</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor2"></div>
+                        <div class="progress-fill" id="sector7-sensor2"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 3</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor3"></div>
+                        <div class="progress-fill" id="sector7-sensor3"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
                     <span class="progress-label">Sensor 4</span>
                     <div class="progress">
-                        <div class="progress-fill" id="sensor4"></div>
+                        <div class="progress-fill" id="sector7-sensor4"></div>
                     </div>
                 </div>
                 <div class="progress-bar">
-                    <span class="progress-label">Average</span>
+                    <span class="progress-label" id="sector7-avg-label">Average</span>
                     <div class="progress">
-                        <div class="progress-fill" id="average"></div>
+                        <div class="progress-fill" id="sector7-avg"></div>
                     </div>
-                </div>
+                </div>>
             </div>
             <div class="toggle-container">
                 <label for="toggle7">Activate Motor</label>
@@ -419,8 +416,7 @@
                 <button onclick="location.href='#head'" class="button2">Return to home page</button></div></center>
           </div>
         </div>
-        <script src="script.js"></script>
-    </main>
+            </main>
 
 
 
@@ -429,7 +425,7 @@
 
 </html> 
 
-<hr>
+<hr class="line">
 
 <!-- Footer -->
    <center> <footer>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Paho MQTT</title><script src="paho.javascript/paho-mqtt-min.js"></script>
+  <script src="mqttws31.min.js"></script>
+</head>
+<body>
+  <h1>Testing Paho MQTT</h1>
+  <script>
+    if (typeof Paho === 'undefined') {
+      console.error('Paho library not loaded!');
+    } else {
+      console.log('Paho library loaded successfully:', Paho);
+    }
+  </script>
+</body>
+</html>
