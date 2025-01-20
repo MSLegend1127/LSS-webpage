@@ -1,7 +1,6 @@
 // MQTT Configuration
-let IP = "5.196.78.28"; // Broker IP address
-let port = 1883; // MQTT broker port
-
+const IP = "5.196.78.28"; // Broker IP address
+const port = 1883; // MQTT broker port
 
 // Create a new MQTT client
 function createClient(clientId) {
