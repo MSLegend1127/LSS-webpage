@@ -87,12 +87,13 @@ main {
 .toggle-switch {
     width: 60px;
     height: 30px;
-    background-color: #ccc;
+    background-color: #cc241d;
     border-radius: 15px;
     position: relative;
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 
 .toggle-switch .toggle-circle {
     width: 28px;
