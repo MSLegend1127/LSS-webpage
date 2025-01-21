@@ -1,5 +1,5 @@
 // WebSocket connection
-const ws = new WebSocket('ws://5.196.78.28:1880');
+const ws = new WebSocket('mqtt://5.196.78.28:1883');
 
 // Store sector data
 let sectorData = {};
