@@ -13,9 +13,9 @@ console.log('MQTT Topics:', topics);
 
 // Create the WebSocket server correctly
 const wss = new WebSocket.Server({ port: 8080 });
-console.log('WebSocket server started on port 8080');
+console.log('WebSocket server started on port 8080');-
 
-const mqttClient = mqtt.connect(broker);
+let mqttClient = mqtt.connect(broker);
 
 // Sample initial moisture data
 let moistureArray = [0, 0, 0, 0];  // Default values
