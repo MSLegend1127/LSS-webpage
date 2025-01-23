@@ -1,7 +1,7 @@
 /* CSS file */
 body {
     font-family: 'Times New Roman',  Garamond;
-    font-size: 40px;
+    font-size: 35px;
     margin: 0;
     padding: 0;
     background-color: #1D2021;
@@ -145,6 +145,9 @@ main {
 
 
 .navbar{
-    background-color: white;
-    padding: 10px;
+    background-color: rgb(175, 13, 13);
+    padding: 0px;
+    display: flex;
+    font-size: 20px;
+    margin: 0px;
 }
