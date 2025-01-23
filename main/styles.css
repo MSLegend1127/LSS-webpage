@@ -34,6 +34,7 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 600px;
+    
 }
 
 .sector h2 {
@@ -142,8 +143,8 @@ main {
     transform: scale(1.05);
 }
 
-.line {
-    height: 1px; /* Adjust this value to change the thickness */
-    background-color: rgb(251,73,52); /* Set the color of the hr */
-    border: none; /* Remove the default border */
+
+.navbar{
+    background-color: white;
+    padding: 10px;
 }
