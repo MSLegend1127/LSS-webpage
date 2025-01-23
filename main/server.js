@@ -1,21 +1,18 @@
-const WebSocket = require('ws');
 const mqtt = require('mqtt');
+const WebSocket = require('ws');
 
-const broker = 'mqtt://5.196.78.28:1883';  // MQTT broker address
-const totalSectors = 7;  // Number of sectors
+// MQTT broker connection details
+const brokerUrl = 'mqtt://5.196.78.28'; // Replace with your broker URL
+const topics = ['sector1', 'sector2', 'sector3', 'sector4', 'sector5', 'sector6', 'sector7'];
 
-// Generate MQTT topics for each sector
-const topics = [];
-for (let i = 1; i <= totalSectors; i++) {
-    topics.push(`sector${i}`);
-}
-console.log('MQTT Topics:', topics);
+// Connect to the MQTT broker
+const client = mqtt.connect(brokerUrl);
 
-// Create the WebSocket server correctly
+// Set up WebSocket server on port 8080
 const wss = new WebSocket.Server({ port: 8080 });
-console.log('WebSocket server started on port 8080');-
+console.log('WebSocket server started on port 8080');
 
-let mqttClient = mqtt.connect(broker);
+const mqttClient = mqtt.connect(broker);
 
 // Sample initial moisture data
 let moistureArray = [0, 0, 0, 0];  // Default values
@@ -51,24 +48,47 @@ mqttClient.on('connect', () => {
             console.log('Subscribed to topics:', topics.join(', '));
         }
     });
+  });
 });
 
-// Listen for incoming MQTT messages
-mqttClient.on('message', handleMqttMessages);
+client.on('message', (topic, message) => {
+  try {
+    const parsedMessage = JSON.parse(message.toString());
 
-// Handle WebSocket connections
-wss.on('connection', (ws) => {
-    console.log('WebSocket client connected');
-    
-    // Send initial moisture data
-    ws.send(JSON.stringify({ moisture: moistureArray }));
+    if (parsedMessage.moisture && Array.isArray(parsedMessage.moisture)) {
+      const { moisture } = parsedMessage;
 
-    ws.on('close', () => {
-        console.log('WebSocket client disconnected');
-    });
+      // Validate moisture array
+      const isValid = moisture.every((value) => Number.isInteger(value) && value >= 0 && value <= 100);
+
+      if (isValid) {
+        console.log(`MQTT - Topic: ${topic}, Message:`, parsedMessage);
+
+        // Prepare sector-specific message
+        const sectorNumber = topic.replace('sector', '');
+        const sectorMessage = {
+          [`moisture${sectorNumber}`]: moisture,
+        };
+
+        const data = JSON.stringify({ topic, message: sectorMessage });
+
+        // Broadcast to all connected WebSocket clients
+        connectedClients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(data);
+          }
+        });
+      } else {
+        console.warn(`Invalid "moisture" values in topic "${topic}":`, parsedMessage);
+      }
+    } else {
+      console.warn(`Invalid message format from topic "${topic}":`, message);
+    }
+  } catch (err) {
+    console.error(`Failed to parse message from topic "${topic}":`, err.message);
+  }
 });
 
-// Handle server errors
-wss.on('error', (error) => {
-    console.error('WebSocket server error:', error);
+client.on('error', (err) => {
+  console.error('MQTT client error:', err.message);
 });
