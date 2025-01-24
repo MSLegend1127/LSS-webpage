@@ -1,7 +1,7 @@
 /* CSS file */
 body {
     font-family: 'Times New Roman',  Garamond;
-    font-size: 40px;
+    font-size: 35px;
     margin: 0;
     padding: 0;
     background-color: #1D2021;
@@ -34,6 +34,7 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 600px;
+    
 }
 
 .sector h2 {
@@ -142,8 +143,11 @@ main {
     transform: scale(1.05);
 }
 
-.line {
-    height: 1px; /* Adjust this value to change the thickness */
-    background-color: rgb(251,73,52); /* Set the color of the hr */
-    border: none; /* Remove the default border */
+
+.navbar{
+    background-color: rgb(175, 13, 13);
+    padding: 0px;
+    display: flex;
+    font-size: 20px;
+    margin: 0px;
 }
