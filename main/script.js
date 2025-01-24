@@ -126,4 +126,5 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.sector').forEach((sector) => {
   observer.observe(sector);
-}); 
+
+});

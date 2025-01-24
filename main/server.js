@@ -70,6 +70,41 @@ mqttClient.on('error', (err) => {
   console.error('MQTT client error:', err.message);
 });
 
+wss.on('connection', (ws) => {
+  console.log('WebSocket client connected');
+
+  ws.on('message', (data) => {
+    try {
+      const { sector, message } = JSON.parse(data);
+
+      if (sector && message) {
+        const topic = `${sector}`; // e.g., sector1/control
+        mqttClient.publish(topic, message, { qos: 1 }, (err) => {
+          if (err) {
+            console.error(`Error publishing to MQTT topic ${topic}:`, err.message);
+            ws.send(JSON.stringify({ status: 'error', error: err.message }));
+          } else {
+            console.log(`Published to ${topic}: ${message}`);
+            ws.send(
+              JSON.stringify({ status: 'success', sector, message })
+            ); // Acknowledge the client
+          }
+        });
+      } else {
+        console.error('Invalid message format:', data);
+        ws.send(JSON.stringify({ status: 'error', error: 'Invalid message format' }));
+      }
+    } catch (err) {
+      console.error('Error processing message:', err.message);
+      ws.send(JSON.stringify({ status: 'error', error: err.message }));
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket client disconnected');
+  });
+});
+
 // Handle WebSocket connection
 wss.on('connection', (ws) => {
   console.log('New WebSocket client connected.');
