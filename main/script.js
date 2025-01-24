@@ -101,12 +101,10 @@ function toggleState(sectorNumber) {
 // Handle sector visibility
 function onSectorVisible(sectorId) {
   const sector = document.getElementById(sectorId);
-  console.log(`Sector${sectorId} is now visible`);
 }
 
 function onSectorHidden(sectorId) {
   const sector = document.getElementById(sectorId);
-  console.log(`Sector${sectorId} is now hidden`);
 }
 
 // Intersection Observer setup
