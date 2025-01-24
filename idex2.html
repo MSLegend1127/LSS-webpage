@@ -44,7 +44,7 @@ ws.onerror = (error) => {
 function updateSectorData(sectorId, message) {
   const sectorNumber = sectorId.replace('sector', '');
   const moistureKey = `moisture${sectorNumber}`;
-  let moisture = message[moistureKey];
+  const moisture = message[moistureKey];
 
   if (Array.isArray(moisture) && moisture.length === 4) {
     // Update individual sensor bars
