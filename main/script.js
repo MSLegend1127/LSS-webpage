@@ -29,7 +29,7 @@ ws.onmessage = (event) => {
           const sensorElement = document.getElementById(`${sectorId}-sensor${index + 1}`);
           if (sensorElement) {
             sensorElement.style.width = `${value}%`;
-            sensorElement.innerText = `${value}%`; // Optional: Show percentage inside the bar
+            //sensorElement.innerText = `sensor ${index+1}:${value}%`;  //optional: Show percentage inside the bar
           } else {
             console.warn(`Element not found: ${sectorId}-sensor${index + 1}`);
           }
