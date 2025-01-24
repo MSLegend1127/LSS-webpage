@@ -12,6 +12,32 @@ ws.onmessage = (event) => {
 
     if (topic.startsWith('sector')) {
       const sectorId = topic; // e.g., "sector1"
+
+      const sectorNumber = sectorId.replace('sector', '');
+      const moistureKey = `moisture${sectorNumber}`;
+      const moisture = message[moistureKey];
+
+      if (Array.isArray(moisture) && moisture.length === 4) {
+        // Update sensor progress bars
+        moisture.forEach((value, index) => {
+          const sensorElement = document.getElementById(`${sectorId}-sensor${index + 1}`);
+          if (sensorElement) {
+            sensorElement.style.width = `${value}%`;
+            //sensorElement.innerText = `sensor ${index+1}:${value}%`;  //optional: Show percentage inside the bar
+          } else {
+            console.warn(`Element not found: ${sectorId}-sensor${index + 1}`);
+          }
+        });
+
+        // Calculate and update average
+        const average = Math.round(moisture.reduce((sum, val) => sum + val, 0) / moisture.length);
+        const avgBar = document.getElementById(`${sectorId}-avg`);
+        const avgLabel = document.getElementById(`${sectorId}-avg-label`);
+        if (avgBar) avgBar.style.width = `${average}%`;
+        if (avgLabel) avgLabel.innerText = `Average: ${average}%`;
+      } else {
+        console.error(`Invalid moisture data for ${sectorId}:`, message);
+=======
       const sectorElement = document.getElementById(sectorId);
 
       // Check if the sector is visible
