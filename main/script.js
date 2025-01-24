@@ -1,6 +1,34 @@
+// WebSocket and MQTT setup
+const mqttBrokerUrl = 'ws://5.196.78.28:9001'; // WebSocket-based MQTT broker URL (adjust port for WebSocket support)
+const mqttClient = mqtt.connect(mqttBrokerUrl);
+
+// Handle MQTT connection events
+mqttClient.on('connect', () => {
+  console.log('Connected to MQTT broker');
+});
+
+// Toggle sprinkler state and send MQTT message
+function toggleState(sectorNumber) {
+  const toggle = document.getElementById(`toggle${sectorNumber}`);
+  const isOn = toggle.classList.toggle('on'); // Toggle the "on" class
+  const message = isOn ? 'sprinkler:on' : 'sprinkler:off'; // Determine message based on state
+
+  // Send the message to the server via WebSocket
+  if (ws.readyState === WebSocket.OPEN) {
+    const data = JSON.stringify({
+      sector: `sector${sectorNumber}`,
+      message: message,
+    });
+    ws.send(data);
+    console.log('Sent to server:', data);
+  } else {
+    console.error('WebSocket connection is not open');
+  }
+}
+
+// WebSocket setup (for receiving real-time updates from the server)
 let ws = new WebSocket('ws://localhost:8080');
 
-// WebSocket setup
 ws.onopen = () => {
   console.log('WebSocket connection established');
 };
@@ -12,12 +40,7 @@ ws.onmessage = (event) => {
 
     if (topic.startsWith('sector')) {
       const sectorId = topic; // e.g., "sector1"
-      const sectorElement = document.getElementById(sectorId);
-
-      // Check if the sector is visible
-      if (sectorElement && sectorElement.classList.contains('visible')) {
-        updateSectorData(sectorId, message);
-      }
+      updateSectorData(sectorId, message);
     }
   } catch (err) {
     console.error('Failed to process WebSocket message:', event.data, 'Error:', err.message);
@@ -35,16 +58,11 @@ ws.onerror = (error) => {
   console.error('WebSocket error:', error);
 };
 
-// Scroll to the specific sector
-// function navToSector(sectorId) {
-//   document.getElementById(sectorId).scrollIntoView({ behavior: 'smooth' });
-// }
-
-// Update the sector with real-time data
+// Update sector with real-time data
 function updateSectorData(sectorId, message) {
   const sectorNumber = sectorId.replace('sector', '');
   const moistureKey = `moisture${sectorNumber}`;
-  let moisture = message[moistureKey];
+  const moisture = message[moistureKey];
 
   if (Array.isArray(moisture) && moisture.length === 4) {
     // Update individual sensor bars
@@ -52,65 +70,49 @@ function updateSectorData(sectorId, message) {
       const sensorElement = document.getElementById(`${sectorId}-sensor${index + 1}`);
       if (sensorElement) {
         sensorElement.style.width = `${value}%`;
-        sensorElement.innerText = `${value}%`;
+        // sensorElement.innerText = `${value}%`;
+
+        // Set color based on moisture level
+        if (value < 30) {
+          sensorElement.style.backgroundColor = '#e74c3c'; // Red (dry)
+        } else if (value >= 30 && value < 50) {
+          sensorElement.style.backgroundColor = '#f1c40f'; // Yellow (moderate)
+        } else if (value >= 50 && value < 80) {
+          sensorElement.style.backgroundColor = '#2ecc71'; // Green (wet)
+        } else {
+          sensorElement.style.backgroundColor = '#3498db'; // Blue (oversaturated)
+        }
       }
-       // Set color based on moisture level
-       if (value < 30) {
-        sensorElement.style.backgroundColor = '#e74c3c'; // Red (dry)
-      } else if (value >= 30 && value < 50) {
-        sensorElement.style.backgroundColor = '#f1c40f'; // Yellow (moderate)
-      } else if (value >= 50 && value < 80) {
-        sensorElement.style.backgroundColor = '#2ecc71'; // Green (wet)
-      } else {
-        sensorElement.style.backgroundColor = '#3498db'; // Blue (oversaturated)
-      } 
-        
     });
 
-    // Calculate and update the average
-    const average = Math.round(moisture.reduce((sum, val) => sum + val, 0) / moisture.length);
-    const avgBar = document.getElementById(`${sectorId}-avg`);
-    const avgLabel = document.getElementById(`${sectorId}-avg-label`);
-    if (avgBar) avgBar.style.width = `${average}%`;
-    if (avgLabel) avgLabel.innerText = `Average: ${average}%`;
+// Calculate and update the average
+const average = Math.round(moisture.reduce((sum, val) => sum + val, 0) / moisture.length);
+const avgBar = document.getElementById(`sector${sector}-avg`);
+const avgLabel = document.getElementById(`sector${sectorId}-avg-label`);
+
+if (avgBar) {
+  // Update the width of the average bar
+  avgBar.style.width = `${average}%`;
+
+  // Change the color of the bar based on the average moisture level
+  if (average < 30) {
+    avgBar.style.backgroundColor = '#e74c3c'; // Red (dry)
+  } else if (average >= 30 && average < 50) {
+    avgBar.style.backgroundColor = '#f1c40f'; // Yellow (moderate)
+  } else if (average >= 50 && average < 80) {
+    avgBar.style.backgroundColor = '#2ecc71'; // Green (wet)
   } else {
-    console.error(`Invalid moisture data for ${sectorId}:`, message);
+    avgBar.style.backgroundColor = '#3498db'; // Blue (oversaturated)
   }
 }
 
-// Toggle state management
-function toggleState(sectorNumber) {
-    const toggle = document.getElementById(`toggle${sectorNumber}`);
-    const isOn = toggle.classList.toggle('on'); // Toggle the "on" class
-    const message = isOn ? 'sprinkler:on' : 'sprinkler:off'; // Determine message based on state
-  
-
-    // Send message via WebSocket
-    if (ws.readyState === WebSocket.OPEN) {
-      const topic = `sector${sectorNumber}`;
-      const data = { topic, message };
-      ws.send(JSON.stringify(data)); // Send message to the WebSocket server
-      console.log(`${topic}:${message}`);
-      
-
-    } else {
-      console.error('WebSocket connection is not open');
-    }
-  }
-
-// Handle sector visibility
-function onSectorVisible(sectorId) {
-  const sector = document.getElementById(sectorId);
-  console.log(`Sector${sectorId} is now visible`);
-  updateSectorData(sectorId);
+if (avgLabel) {
+  // Update the text to display the current average value
+  avgLabel.innerText = `Average: ${average}%`;
 }
 
-function onSectorHidden(sectorId) {
-  const sector = document.getElementById(sectorId);
-  console.log(`Sector${sectorId} is now hidden`);
-}
 
-// Intersection Observer setup
+// Intersection Observer setup (same as before)
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     const sectorId = entry.target.id;
@@ -122,7 +124,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 });
 
-// Observe each sector
 document.querySelectorAll('.sector').forEach((sector) => {
   observer.observe(sector);
-});
+}); 
