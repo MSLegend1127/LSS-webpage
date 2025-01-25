@@ -45,18 +45,23 @@ main {
 
 .progress-container {
     margin: 20px 0;
+    
 }
 
 .progress-bar {
     display: flex;
     align-items: center;
     margin: 10px 0;
+    
+    
 }
 
-.progress-label {
-    font-size: 25px;
+.sensor-percentage-label {
+    font-size: 22px;
     flex: 1;
     text-align: left;
+    gap: 10px;
+    
 }
 
 .progress {

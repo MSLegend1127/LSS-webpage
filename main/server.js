@@ -12,7 +12,7 @@ const mqttClient = mqtt.connect(brokerUrl);
 const wss = new WebSocket.Server({ port: 8080 });
 console.log('WebSocket server started on port 8080');
 
-// Handle incoming MQTT messages
+// Handle MQTT connection
 mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker!');
   
@@ -26,12 +26,27 @@ mqttClient.on('connect', () => {
   });
 });
 
-// Handle MQTT messages
+// Debugging MQTT connection errors
+mqttClient.on('error', (err) => {
+  console.error('MQTT client error:', err.message);
+});
+
+// Handle incoming MQTT messages
 mqttClient.on('message', (topic, message) => {
   try {
-    // Parse the incoming MQTT message
-    const parsedMessage = JSON.parse(message.toString());
+    const messageString = message.toString();
+    let parsedMessage;
 
+    try {
+      // Try to parse the message as JSON
+      parsedMessage = JSON.parse(messageString);
+    } catch (err) {
+      // If parsing fails, log a warning and treat the message as a raw string
+      console.warn(`Received non-JSON message from topic "${topic}":`, messageString);
+      parsedMessage = { rawMessage: messageString };
+    }
+
+    // Process JSON or raw string messages
     if (parsedMessage.moisture && Array.isArray(parsedMessage.moisture)) {
       const { moisture } = parsedMessage;
 
@@ -57,21 +72,29 @@ mqttClient.on('message', (topic, message) => {
       } else {
         console.warn(`Invalid moisture values in topic "${topic}":`, parsedMessage);
       }
+    } else if (parsedMessage.rawMessage) {
+      // Handle raw string messages
+      console.log(`MQTT - Topic: ${topic}, Raw Message:`, parsedMessage.rawMessage);
+
+      // Broadcast raw string messages to WebSocket clients if needed
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({ topic, message: parsedMessage.rawMessage })
+          );
+        }
+      });
     } else {
-      console.warn(`Invalid message format from topic "${topic}":`, message.toString());
+      console.warn(`Unexpected message format from topic "${topic}":`, messageString);
     }
   } catch (err) {
     console.error(`Failed to process message from topic "${topic}":`, err.message);
   }
 });
 
-// Handle MQTT errors
-mqttClient.on('error', (err) => {
-  console.error('MQTT client error:', err.message);
-});
-
+// Handle WebSocket connections
 wss.on('connection', (ws) => {
-  console.log('WebSocket client connected');
+  console.log('New WebSocket client connected.');
 
   ws.on('message', (data) => {
     try {
@@ -103,12 +126,14 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     console.log('WebSocket client disconnected');
   });
+
+  ws.on('error', (err) => {
+    console.error('WebSocket client error:', err.message);
+  });
 });
 
-// Handle WebSocket connection
+// Handle additional WebSocket events
 wss.on('connection', (ws) => {
-  console.log('New WebSocket client connected.');
-
   ws.on('close', () => {
     console.log('WebSocket client disconnected.');
   });
