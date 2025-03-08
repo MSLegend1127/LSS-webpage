@@ -92,7 +92,7 @@ function updateSectorData(sectorId, message) {
         percentageLabel.innerText = `sensor${index + 1}: ${value}%`; // Display the percentage
         percentageLabel.style.fontSize = '22px' ;
         
-        //percentageLabel.style.color = getMoistureColor(value); // Match bar color
+        percentageLabel.style.color = getMoistureColor(value); // Match bar color
       }
     });
 
