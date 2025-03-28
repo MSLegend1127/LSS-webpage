@@ -1,5 +1,5 @@
-// MQTT and WebSocket setup
-const mqttBrokerUrl = 'ws://5.196.78.28:9001'; // WebSocket-based MQTT broker URL
+// MQTT and WebSocket setupconst mqttBrokerUrl = 'ws://192.168.1.10:9001'; // Use your Raspberry Pi's IP
+const mqttBrokerUrl = 'ws://5.196.78.28:9001'; // Use your Raspberry Pi's IP
 const mqttClient = mqtt.connect(mqttBrokerUrl);
 
 // Handle MQTT connection events
@@ -7,10 +7,11 @@ mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker');
 });
 
+// Toggle sprinkler state for a sector
 function toggleState(sectorNumber) {
   const toggle = document.getElementById(`toggle${sectorNumber}`);
-  const isOn = toggle.classList.toggle('on'); // Toggle the "on" class
-  toggle.classList.toggle('off', !isOn); // Toggle the "off" class
+  const isOn = toggle.classList.toggle('on'); // Toggle "on" class
+  toggle.classList.toggle('off', !isOn); // Toggle "off" class
   const message = isOn ? 'sprinkler:on' : 'sprinkler:off';
 
   // Send the toggle message to the WebSocket server
@@ -27,7 +28,7 @@ function toggleState(sectorNumber) {
 }
 
 // WebSocket setup (for receiving real-time updates from the server)
-let ws = new WebSocket('ws://localhost:8080');
+let ws = new WebSocket('ws://127.0.1.1:8080'); // Use Raspberry Pi IP
 
 ws.onopen = () => {
   console.log('WebSocket connection established');
@@ -53,9 +54,9 @@ ws.onmessage = (event) => {
 };
 
 ws.onclose = () => {
-  console.log('WebSocket connection closed. Retrying...');
+  console.log('WebSocket connection closed. Retrying in 5 seconds...');
   setTimeout(() => {
-    ws = new WebSocket('ws://localhost:8080');
+    ws = new WebSocket('ws://127.0.1.1:8080'); // Reconnect properly
   }, 5000);
 };
 
@@ -90,9 +91,7 @@ function updateSectorData(sectorId, message) {
 
       if (percentageLabel) {
         percentageLabel.innerText = `sensor${index + 1}: ${value}%`; // Display the percentage
-        percentageLabel.style.fontSize = '22px' ;
-        
-        percentageLabel.style.color = getMoistureColor(value); // Match bar color
+        percentageLabel.style.fontSize = '22px';
       }
     });
 

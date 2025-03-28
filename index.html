@@ -1,24 +1,21 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Progress Bar</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Single Page Application</title>
 </head>
 <body>
+    <button onclick="loadPage('about.html')">About</button>
+    <button onclick="loadPage('contact.html')">Contact</button>
 
-    <div class="progress-container">
-        <label for="progressValue">Set Progress (%): </label>
-        <input type="number" id="progressValue" min="0" max="100" value="50">
-        <button onclick="updateProgress()">Update</button>
+    <div id="content"></div>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" data-percentage="50"></div>
-        </div>
-        <p id="progressText">50%</p>
-    </div>
-
-    <script src="script.js"></script>
+    <script>
+        function loadPage(page) {
+            fetch(page)
+                .then(response => response.text())
+                .then(data => document.getElementById('content').innerHTML = data);
+        }
+    </script>
 </body>
 </html>
