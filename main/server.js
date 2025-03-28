@@ -15,7 +15,7 @@ console.log('WebSocket server started on port 8080');
 // Handle MQTT connection
 mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker!');
-  
+
   // Subscribe to all sector topics
   mqttClient.subscribe(topics, (err) => {
     if (err) {

@@ -9,12 +9,14 @@ body {
     opacity: 0;
     animation: pageFadeIn 1s ease-in-out forwards;
 }
+
 /* Keyframes for body fade-in */
 @keyframes pageFadeIn {
     from {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -24,7 +26,7 @@ body {
 header {
     text-align: center;
     padding: 20px;
-    background-color: hsl(0,0%,16%);
+    background-color: hsl(0, 0%, 16%);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -58,28 +60,30 @@ main {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 .sector h2 {
     font-size: 49px;
     margin-bottom: 10px;
-    color: rgb(104,157,106);
+    color: rgb(104, 157, 106);
 }
 
 .progress-container {
     margin: 20px 0;
-    
+
 }
 
 .progress-bar {
     display: flex;
     align-items: center;
     margin: 10px 0;
-    
-    
+
+
 }
 
 .sensor-percentage-label {
@@ -87,7 +91,7 @@ main {
     flex: 1;
     text-align: left;
     gap: 10px;
-    
+
 }
 
 .progress {
@@ -148,8 +152,10 @@ main {
 }
 
 .button2 {
-    width: 100px;  /* Set width */
-    height: 60px;  /* Set height */
+    width: 100px;
+    /* Set width */
+    height: 60px;
+    /* Set height */
 }
 
 .button-container {
@@ -162,11 +168,13 @@ main {
     transform: scale(0.8);
     animation: buttonAppear 0.8s ease-in-out 0.8s forwards;
 }
+
 @keyframes buttonAppear {
     from {
         opacity: 0;
         transform: scale(0.8);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -176,10 +184,10 @@ main {
 .button-container button {
     width: 220px;
     height: 60px;
-    background-color: #FBF1C7; 
+    background-color: #FBF1C7;
     border: none;
     border-radius: 10px;
-    color: hsl(195,6.5%,12.2%); 
+    color: hsl(195, 6.5%, 12.2%);
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -212,6 +220,7 @@ main {
         opacity: 0;
         transform: translateY(-50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -248,6 +257,7 @@ footer {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
